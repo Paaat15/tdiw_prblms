@@ -6,10 +6,21 @@
         <title> UAB/Enginyeria </title>
 	    <link rel="stylesheet" type="text/css" href="css/uab.css">
 	<!-- completa -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/funcions.js"></script>
     </head>
     <body>
         <?php
 		    //completa
+            require_once __DIR__ .'/connectaBD.php';
+            $connexio = connectaBD();
+            $sqlG = "SELECT id,nom FROM graus";
+            $consultaGraus = pg_query($connexio, $sql) or die('La consulta de graus ha fallat: ' . pg_last_error());
+            $resultatG = pg_fetch_all($consultaGraus);
+            $sqlM = "SELECT id,nom FROM mencions WHERE grau=1";
+            $consultaMencions = pg_query($connexio, $sqlM) or die('La consulta de mencions ha fallat: ' . pg_last_error());
+            $resultatM = pg_fetch_all($consultaMencions);
+            pg_close($connexio);
         ?>
         <div id="layout">
             <!-- SECCIÓ 1 - Capçalera -->
@@ -52,12 +63,18 @@
                         <select name="grau" id="graus">
                         <?php
                             //completa
+                            foreach($resultatG as $grau) {
+                                echo '<option value="' . $grau['id'] . '">' . $grau['nom'] . '</option>';
+                            }
                         ?>
                         </select>
                         <p>Tria la menció que t'atreu més:<p>
                         <select name="mencio" id="mencions">
                         <?php
                             //completa
+                            foreach($resultatM as $mencio) {
+                                echo '<option value="' . $mencio['id'] . '">' . $mencio['nom'] . '</option>';
+                            }
                         ?>
                         </select>
                         <br /><br />
